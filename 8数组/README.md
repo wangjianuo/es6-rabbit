@@ -109,7 +109,7 @@ console.log(a4[0] === a1[0]) // false
 
 > `Array.from`方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）
 
-## 1、转真正数据
+## 1、转真正数组
 
 ```javascript
 let arrayLike = {
