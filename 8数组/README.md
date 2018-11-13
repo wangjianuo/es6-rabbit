@@ -198,3 +198,174 @@ Array.prototype.copyWithin(target, start = 0, end = this.length)
 
 # 五、find()和findIndex()
 
+## find()
+
+> 数组实例的`find`方法，用于找出**第一个**符合条件的数组成员。它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为`true`的成员，然后返回该成员。如果没有符合条件的成员，则返回`undefined`。
+
+```javascript
+const a1 = [1, 2, 3, 4, 10, 13].find(item => item > 9)
+console.log('a1', a1) //10
+```
+
+```javascript
+const a2 = [1, 2, 3, 4, 10, 13].find((value, index, arr) => {
+    return value > 9
+})
+```
+
+> `find`方法的回调函数可以接受三个参数，依次为当前的值、当前的位置和原数组。
+
+
+
+## findIndex()
+
+> 数组实例的`findIndex`方法的用法与`find`方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回`-1`。
+
+```javascript
+[1, 5, 10, 15].findIndex(function(value, index, arr) {
+  return value > 9;
+}) // 2
+```
+
+> 上面的2个方法，都可以发现`NaN`，弥补了数组的`indexOf`方法的不足。
+
+```javascript
+[NaN].indexOf(NaN)
+// -1
+
+[NaN].findIndex(y => Object.is(NaN, y))
+// 0
+```
+
+> 上面代码中，`indexOf`方法无法识别数组的`NaN`成员，但是`findIndex`方法可以借助`Object.is`方法做到。
+
+
+
+# 六、fill()
+
+> `fill`方法使用给定值，填充一个数组。
+
+```javascript
+['a', 'b', 'c'].fill(7)
+// [7, 7, 7]
+
+new Array(3).fill(7)
+// [7, 7, 7]
+```
+
+> `fill`方法用于空数组的初始化非常方便。数组中已有的元素，会被全部抹去。
+
+> 注意，如果填充的类型为对象，那么被赋值的是同一个内存地址的对象，而不是深拷贝对象。
+
+```javascript
+let arr = new Array(3).fill({name: "Mike"});
+arr[0].name = "Ben";
+arr
+// [{name: "Ben"}, {name: "Ben"}, {name: "Ben"}]
+
+let arr = new Array(3).fill([]);
+arr[0].push(5);
+arr
+// [[5], [5], [5]]
+```
+
+
+
+# 七、entries()，keys()和values()
+
+> ES6 提供三个新的方法——`entries()`，`keys()`和`values()`——用于遍历数组。
+>
+> 它们都返回一个遍历器对象`Iterator`，可以用`for...of`循环进行遍历，唯一的区别是：
+>
+> `keys()`是对键名的遍历、
+>
+> `values()`是对键值的遍历，
+>
+> `entries()`是对键值对的遍历
+
+
+
+```javascript
+for (let index of ['a', 'b', 'c'].keys()) {
+    console.log('index=', index)  // 0 1 2
+}
+
+
+for (let elem of ['a', 'b', 'c'].values()) {
+    console.log('value=', elem)  // a b  c
+}
+
+for (let [index, elem] of ['a', 'b', 'c'].entries()) {
+    console.log(index, elem)
+}
+// 0 "a" 
+// 1 "b"
+// 2 "c"
+```
+
+
+
+# 八、includes()
+
+> `Array.prototype.includes`方法返回一个布尔值，表示某个数组是否包含给定的值，与字符串的`includes`方法类似
+
+```javascript
+console.log([1, 3, 5].includes(1)) // true
+console.log([1, 3, 5].includes(999)) // false
+console.log([1, 3, NaN].includes(NaN)) // true
+```
+
+
+
+# 九、flat() 和 flatMap()
+
+## flat()
+
+> 数组的成员有时还是数组，`Array.prototype.flat()`用于将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数据没有影响
+
+```javascript
+console.log([1, 2, [3], 5].flat()) // [1, 2, 3, 5]
+```
+
+> `flat()`默认只会“拉平”一层，如果想要“拉平”多层的嵌套数组，可以将`flat()`方法的参数写成一个整数，表示想要拉平的层数，默认为1
+
+```javascript
+[1, 2, [3, [4, 5]]].flat()
+// [1, 2, 3, [4, 5]]
+
+[1, 2, [3, [4, 5]]].flat(2)
+// [1, 2, 3, 4, 5]
+```
+
+> 如果不管有多少层嵌套，都要转成一维数组，可以用`Infinity`关键字作为参数。
+
+```javascript
+[1, [2, [3]]].flat(Infinity)
+// [1, 2, 3]
+```
+
+## flatMap()
+
+> `flatMap()`方法对原数组的每个成员执行一个函数（相当于执行`Array.prototype.map()`），然后对返回值组成的数组执行`flat()`方法。该方法返回一个新数组，不改变原数组。
+
+```javascript
+// 相当于 [[2, 4], [3, 6], [4, 8]].flat()
+[2, 3, 4].flatMap((x) => [x, x * 2])
+// [2, 4, 3, 6, 4, 8]
+```
+
+
+
+# 十、数组的空位
+
+> 数组的空位指，数组的某一个位置没有任何值。
+>
+> 由于空位的处理规则非常不统一，所以建议避免出现空位。
+
+
+
+----
+
+> TODO LIST
+
+- 一个数组是否包含另一个数组？

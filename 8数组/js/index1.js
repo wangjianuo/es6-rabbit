@@ -1,1 +1,1 @@
-console.log(Array.of('a', 1, 'b', 2, 'c'))  // ["a", 1, "b", 2, "c"]
+console.log([1, 2, [3], 5].flat())
